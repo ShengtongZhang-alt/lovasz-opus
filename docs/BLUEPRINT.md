@@ -52,7 +52,7 @@ Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean
 | MAIN | Theorem 1.1 | `Lovasz.main_proof` — `Lovasz/Main.lean` (type is literally that of `Lovasz.hamiltonian_of_polylog_degree`) | GD, T3.2, L3.8 | proved |
 | L3.8 | Lemma 3.8 (cycle merging): absorbing parts + connected contraction of the connecting paths ⇒ Hamiltonian | `Lovasz.cycle_merging` — `Lovasz/CycleMerging.lean` | — | proved* |
 | T3.2 | Theorem 3.2 (local absorption) | `Lovasz.local_absorption` — `Lovasz/LocalAbsorption.lean` | T3.2a–g (below) | proved |
-| GD | Sections 5–7: the weighted partition, the connecting system and the parameter check of §7, packaged as the hypotheses of Lemma 3.8 plus those of Theorem 3.2 for each part | `Lovasz.global_decomposition` — `Lovasz/GlobalDecomposition.lean` | L5.1, P5.3, P6.1, L2.1 | proved |
+| GD | Sections 5–7: the weighted partition, the connecting system and the parameter check of §7, packaged as the hypotheses of Lemma 3.8 plus those of Theorem 3.2 for each part | `Lovasz.global_decomposition` — `Lovasz/GlobalDecomposition.lean` | L5.1, P5.3, P6.1, L2.1 | proved* |
 
 ### Section 2: weighted spectral and matching facts
 
@@ -64,8 +64,8 @@ Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean
 | L2.1 | Lemma 2.1: deleting vertices/edges with degree loss `≤ b ≤ c'D` keeps gap `≥ σ - O(b/D)` | `Lovasz.hasGap_of_deletion` — `Lovasz/Perturbation.lean` | — | proved* |
 | E2.4 | (2.3)–(2.4): the positive part `E₊` of `N_H - uuᵀ` has `(E₊)_vv ≤ C r^{-1/2}` for comparable support degrees `r` | `WP.posPart_factor`, `WP.row_Emat` — `Lovasz/WeightedPartition.lean` | — | proved* |
 | L2.2 | Lemma 2.2 (column sampling): `P(‖F[:,I]‖ > √q‖F‖ + C c√t) ≤ r(s+1)e^{-t}` | `Lovasz.column_sampling` — `Lovasz/ColumnSampling.lean` | L4.3, L4.2m | proved* |
-| L2.3 | Lemma 2.3 (bipartite sampling) | `Lovasz.bipartite_sampling` — `Lovasz/BipartiteSampling.lean` | L2.2, K.chernoff, L2.1 | stated |
-| L2.4 | Lemma 2.4 (fixed boundary, fresh layer) | see the T3.2 table below | L2.2, K.chernoff | stated |
+| L2.3 | Lemma 2.3 (bipartite sampling) | `Lovasz.bipartite_sampling` — `Lovasz/BipartiteSampling.lean` | L2.2, K.chernoff, L2.1 | proved* |
+| L2.4 | Lemma 2.4 (fixed boundary, fresh layer) | see the T3.2 table below | L2.2, K.chernoff | proved* |
 | L2.5 | Lemma 2.5 (robust Hall) | `Lovasz.robust_hall` — `Lovasz/RobustHall.lean` | K.hall | proved* |
 | K.hall | Hall's marriage theorem | Mathlib `Finset.all_card_le_biUnion_card_iff_exists_injective` | — | proved (Mathlib) |
 | K.chernoff | scalar Chernoff bounds, including sampling without replacement and bounded weights (§2.2) | `Lovasz.chernoff_upper`, `chernoff_lower`, `hypergeometric_upper`, `hypergeometric_lower` — `Lovasz/Chernoff.lean` | — | proved* |
@@ -90,11 +90,11 @@ sub-nodes below, and `local_absorption` is proved from it.
 |---|---|---|---|---|
 | T3.2a | delete `E`; `H₀` keeps degrees `(1 ± 2cσ)D` and gap `σ/2` | `LocalAbsorption.deletion_step` — `Lovasz/Absorption/Basic.lean` | L2.1 | proved* |
 | T3.2b | the initial random partition (`R₁, R₂ = C ∪ Q, Z, I, O, U, V`, ports, dummies, filler matching) satisfies all events of §3.3, recorded in the structure `InitPartition` | `LocalAbsorption.initial_partition` — `Lovasz/Absorption/InitialPartition.lean` | L2.2, L2.3, L2.5, L2.1, E2.2c, K.chernoff | stated |
-| T3.2c | router: short cycles in `C` (L3.7), comparators (L3.5), arrangement (L3.6), all connections via L3.4 in `Q` (`RouterSpec`) | `LocalAbsorption.router_step` — `Lovasz/Absorption/RouterStep.lean` | L3.4, L3.5, L3.6, L3.7 | stated |
+| T3.2c | router: short cycles in `C` (L3.7), comparators (L3.5), arrangement (L3.6), all connections via L3.4 in `Q` (`RouterSpec`) | `LocalAbsorption.router_step` — `Lovasz/Absorption/RouterStep.lean` | L3.4, L3.5, L3.6, L3.7 | proved* |
 | T3.2d | attachments of `E` to the ports via L3.4 in `R₁`; the formal matching `J'` | inside `absorb_of_partition` | L3.4 | proved* |
 | T3.2e | divisibility: a path of prescribed odd length in `Z` (`DivSpec`) | `LocalAbsorption.divisibility_step` — `Lovasz/Absorption/Basic.lean` | L3.dfs | proved* |
-| L2.4 | Lemma 2.4 (fixed boundary, fresh layer), in counting form with the one-sided events (2.9) as `OneSided` | `LocalAbsorption.fixed_boundary_fresh_layer` — `Lovasz/Absorption/FixedBoundary.lean` | L2.2, L2.3 (helpers), K.chernoff | stated |
-| T3.2f | fresh equipartition into layers with perfect matchings between consecutive layers, as a grid of `w` disjoint `O`–`I` rows (`FreshSpec`) | `LocalAbsorption.fresh_layers` — `Lovasz/Absorption/FreshLayers.lean` | L2.1, L2.3, L2.4, L2.5, E2.2c, K.chernoff | stated |
+| L2.4 | Lemma 2.4 (fixed boundary, fresh layer), in counting form with the one-sided events (2.9) as `OneSided` | `LocalAbsorption.fixed_boundary_fresh_layer` — `Lovasz/Absorption/FixedBoundary.lean` | L2.2, L2.3 (helpers), K.chernoff | proved* |
+| T3.2f | fresh equipartition into layers with perfect matchings between consecutive layers, as a grid of `w` disjoint `O`–`I` rows (`FreshSpec`) | `LocalAbsorption.fresh_layers` — `Lovasz/Absorption/FreshLayers.lean` | L2.1, L2.3, L2.4, L2.5, E2.2c, K.chernoff | proved* |
 | T3.2g | assembly: router + outside rows + expansion of the formal edges ⇒ the path system of `IsMatchingAbsorbing` | `LocalAbsorption.assembly_core`, `expansion`, `uv_bijection`, `absorb_of_partition` — `Lovasz/Absorption/Basic.lean`, `Lovasz/LocalAbsorption.lean` | T3.2a, T3.2c–f (as hypotheses) | proved |
 
 Modelling choices in T3.2's decomposition (harmless modifications of the paper): the
@@ -107,8 +107,8 @@ used; when the paper's residue is `0`, one layer fewer); in the one-sided events
 
 | id | statement (paper) | Lean name — file | depends on | status |
 |---|---|---|---|---|
-| K.bmatch | unit-capacitated perfect b-matching polytope (4.1) [5] | `Lovasz.bmatching_polytope` — `Lovasz/BMatchingPolytope.lean` | — | stated |
-| L4.1 | Lemma 4.1 (robust signed integrality) | `Lovasz.robust_signed_integrality` — `Lovasz/SignedIntegrality.lean` | K.bmatch | proved |
+| K.bmatch | unit-capacitated perfect b-matching polytope (4.1) [5] | `Lovasz.bmatching_polytope` — `Lovasz/BMatchingPolytope.lean` | — | proved* |
+| L4.1 | Lemma 4.1 (robust signed integrality) | `Lovasz.robust_signed_integrality` — `Lovasz/SignedIntegrality.lean` | K.bmatch | proved* |
 | L4.2 | Lemma 4.2 (signed swap rounding) | `Lovasz.signed_swap_rounding` — `Lovasz/SwapRounding.lean` | — | proved* |
 | L4.2m | line processes preserve the mean and have exact support | `Lovasz.LineProcess.expect_eq`, `Lovasz.LineProcess.isExact` — `Lovasz/SwapRounding.lean` | — | proved* |
 | L4.3 | Lemma 4.3 (bounded-support concentration) | `Lovasz.bounded_support_concentration` — `Lovasz/TraceConcentration.lean` | — | proved* |
@@ -132,16 +132,16 @@ used; when the paper's residue is `0`, one layer fewer); in the one-sided events
 | L6.2 | Lemma 6.2 (coset cuts) | `Lovasz.coset_cut` — `Lovasz/CosetCuts.lean` | — | proved* |
 | K.trees | Nash-Williams–Tutte tree packing [4] | `Lovasz.tree_packing` — `Lovasz/TreePacking.lean` | — | proved* |
 | E6.4 | (6.4): cut counting | `Lovasz.cut_count` — `Lovasz/TreePacking.lean` | K.trees | proved* |
-| E6.1 | §6.1: label sampling (6.2) | `Connector.label_sampling` — `Lovasz/Connecting/LabelSampling.lean`; the `O(L)` generating labels whose lifts generate `G × C₂`: `Connector.added_labels` — `Lovasz/Connecting/Basic.lean` (proved*) | K.chernoff | stated |
-| E6.5 | (6.5)–(6.6): reservation estimates | `Connector.reservation_estimates` — `Lovasz/Connecting/Reservation.lean` | L6.2, E6.4, K.chernoff | stated |
-| L6.3 | Lemma 6.3 (allocation cuts; lifted, local-odd-coset, and bipartite versions) | `Connector.allocation_cuts` — `Lovasz/Connecting/AllocationCuts.lean` | K.watkins, L6.2, E6.5 | stated |
+| E6.1 | §6.1: label sampling (6.2) | `Connector.label_sampling` — `Lovasz/Connecting/LabelSampling.lean`; the `O(L)` generating labels whose lifts generate `G × C₂`: `Connector.added_labels` — `Lovasz/Connecting/Basic.lean` (proved*) | K.chernoff | proved* |
+| E6.5 | (6.5)–(6.6): reservation estimates | `Connector.reservation_estimates` — `Lovasz/Connecting/Reservation.lean` | L6.2, E6.4, K.chernoff | proved* |
+| L6.3 | Lemma 6.3 (allocation cuts; lifted, local-odd-coset, and bipartite versions) | `Connector.allocation_cuts` — `Lovasz/Connecting/AllocationCuts.lean` | K.watkins, L6.2, E6.5 | proved* |
 | E6.9 | (6.9)–(6.11): directional balance | `Connector.directional_balance` — `Lovasz/Connecting/Basic.lean` | L6.3, E6.5 (as hypotheses) | proved* |
-| E6.bip | bipartite case: state cuts split into two ordinary part cuts; cut counting for state cuts | `Connector.bip_state_cuts` — `Lovasz/Connecting/BipStateCuts.lean`; `Connector.state_cut_count` — `Lovasz/Connecting/Basic.lean` (proved*) | E6.4 | stated |
-| E6.13 | (6.13)–(6.17): the random matching `R`, marks `Z₀`, cut and endpoint estimates | `Connector.exists_matching` — `Lovasz/Connecting/Matching.lean` | L6.4, E6.4 | stated |
+| E6.bip | bipartite case: state cuts split into two ordinary part cuts; cut counting for state cuts | `Connector.bip_state_cuts` — `Lovasz/Connecting/BipStateCuts.lean`; `Connector.state_cut_count` — `Lovasz/Connecting/Basic.lean` (proved*) | E6.4 | proved* |
+| E6.13 | (6.13)–(6.17): the random matching `R`, marks `Z₀`, cut and endpoint estimates | `Connector.exists_matching` — `Lovasz/Connecting/Matching.lean` | L6.4, E6.4 | proved* |
 | E6.int | §6.5: reserved-vertex paths, circulation (6.18)–(6.19), integral connector | `Connector.connector_of_matching` — `Lovasz/Connecting/Integral.lean` | L4.4, K.hoffman, L4.1 | proved* |
 | E6.jnt | §6.1: joint union bound over the allocation law and the label coins | `Connector.joint_union_bound` — `Lovasz/Connecting/Basic.lean` | — | proved* |
 | L6.4 | Lemma 6.4 (mutual nominations; negative association and Chernoff) | `Lovasz.mutual_nominations` — `Lovasz/MutualNominations.lean` | K.chernoff | proved* |
-| P6.1 | Proposition 6.1 (connecting system); interface `Allocation.IsConnector` in `Lovasz/Allocation.lean` | `Lovasz.connecting_system` — `Lovasz/Connector.lean` | E6.1, E6.5, L6.3, E6.9, E6.bip, E6.13, E6.int, E6.jnt (assembly `Connector.connector_of_outcome` in `Lovasz/Connector.lean`) | proved |
+| P6.1 | Proposition 6.1 (connecting system); interface `Allocation.IsConnector` in `Lovasz/Allocation.lean` | `Lovasz.connecting_system` — `Lovasz/Connector.lean` | E6.1, E6.5, L6.3, E6.9, E6.bip, E6.13, E6.int, E6.jnt (assembly `Connector.connector_of_outcome` in `Lovasz/Connector.lean`) | proved* |
 
 ## Review of the paper's argument
 
