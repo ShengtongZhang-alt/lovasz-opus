@@ -34,4 +34,13 @@ lake build
 
 ## Status
 
-Toolchain set up; statement not yet formalized.
+* **Statement:** formalized in `Challenge.lean` (`Lovasz.hamiltonian_of_polylog_degree`), with
+  fully proved sanity lemmas in `Lovasz/Sanity.lean` (degree = `|S|`, connectivity ⇔
+  `⟨S⟩ = G`, positivity of the threshold, non-vacuity, necessity of `n₀`). Modelling decisions
+  are in `FORMALIZATION.md`.
+* **Proof:** decomposed into a DAG (`docs/BLUEPRINT.md`). The whole DAG type-checks:
+  `Lovasz.main_proof` in `Lovasz/Main.lean` has literally the type of the Challenge theorem and
+  is derived from the three top-level nodes (local absorption, the global decomposition of
+  Sections 5–7, cycle merging); the remaining `sorry`s are in DAG nodes whose status is not
+  `proved`. See the blueprint for the per-node status. The proof is **not** complete.
+* **Paper review:** no definite gap found so far; see the end of `docs/BLUEPRINT.md`.
