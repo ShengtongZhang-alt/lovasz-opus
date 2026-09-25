@@ -1,0 +1,24 @@
+name = "Lovasz"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["Lovasz", "Challenge"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.35.0-rc2"
+
+[[lean_lib]]
+name = "Lovasz"
+globs = ["Lovasz", "Lovasz.+"]
+
+# `Challenge` is the Mathlib-only statement module a reader audits.
+[[lean_lib]]
+name = "Challenge"
+roots = ["Challenge"]
