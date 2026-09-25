@@ -3,7 +3,10 @@ Copyright (c) 2026 Shengtong Zhang. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Shengtong Zhang
 -/
-import Lovasz.Defs
+import Lovasz.Template
+import Lovasz.WeightedPartition
+import Lovasz.Connector
+import Lovasz.Perturbation
 
 /-!
 # Sections 5–7: the global decomposition
