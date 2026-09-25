@@ -24,6 +24,28 @@ theorem signed_circulation {V E : Type*} [Fintype E] [DecidableEq V]
     (hcons : ∀ p : V × Bool, ∑ a ∈ univ.filter (fun a => Γ.twinHead a = p), g a =
       ∑ a ∈ univ.filter (fun a => Γ.twinTail a = p), g a) :
     ∃ f : E → ℝ, (∀ e, l e ≤ f e ∧ f e ≤ u e) ∧ ∀ v, Γ.apply f v = 0 := by
-  sorry
+  refine ⟨fun e => (g (e, false) + g (e, true)) / 2, fun e => ⟨?_, ?_⟩, fun v => ?_⟩
+  · linarith [(hg e false).1, (hg e true).1]
+  · linarith [(hg e false).2, (hg e true).2]
+  · have h1 := hcons (v, true)
+    have h2 := hcons (v, false)
+    rw [Finset.sum_filter, Finset.sum_filter, ← sub_eq_zero, ← Finset.sum_sub_distrib,
+      Fintype.sum_prod_type] at h1 h2
+    have key : Γ.apply (fun e => (g (e, false) + g (e, true)) / 2) v =
+        (1 / 2) * (∑ e, ∑ b : Bool,
+          (((if Γ.twinHead (e, b) = (v, false) then g (e, b) else 0) -
+            (if Γ.twinTail (e, b) = (v, false) then g (e, b) else 0)) -
+          ((if Γ.twinHead (e, b) = (v, true) then g (e, b) else 0) -
+            (if Γ.twinTail (e, b) = (v, true) then g (e, b) else 0)))) := by
+      rw [SignedGraph.apply, Finset.mul_sum]
+      refine Finset.sum_congr rfl fun e _ => ?_
+      simp only [Fintype.sum_bool, SignedGraph.twinHead, SignedGraph.twinTail,
+        SignedGraph.incidence, SignedGraph.signVal, Prod.mk.injEq]
+      cases Γ.sfst e <;> cases Γ.ssnd e <;> by_cases hf : Γ.fst e = v <;>
+        by_cases hs : Γ.snd e = v <;> simp [hf, hs] <;> ring
+    rw [key]
+    simp only [Finset.sum_sub_distrib] at h1 h2 ⊢
+    rw [h1, h2]
+    ring
 
 end Lovasz
