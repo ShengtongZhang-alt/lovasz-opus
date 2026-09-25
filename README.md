@@ -34,13 +34,24 @@ lake build
 
 ## Status
 
-* **Statement:** formalized in `Challenge.lean` (`Lovasz.hamiltonian_of_polylog_degree`), with
-  fully proved sanity lemmas in `Lovasz/Sanity.lean` (degree = `|S|`, connectivity ⇔
-  `⟨S⟩ = G`, positivity of the threshold, non-vacuity, necessity of `n₀`). Modelling decisions
-  are in `FORMALIZATION.md`.
-* **Proof:** decomposed into a DAG (`docs/BLUEPRINT.md`). The whole DAG type-checks:
-  `Lovasz.main_proof` in `Lovasz/Main.lean` has literally the type of the Challenge theorem and
-  is derived from the three top-level nodes (local absorption, the global decomposition of
-  Sections 5–7, cycle merging); the remaining `sorry`s are in DAG nodes whose status is not
-  `proved`. See the blueprint for the per-node status. The proof is **not** complete.
-* **Paper review:** no definite gap found so far; see the end of `docs/BLUEPRINT.md`.
+**The formalization is complete.**
+
+* **Statement:** `Challenge.lean` (`Lovasz.hamiltonian_of_polylog_degree`), with fully proved
+  sanity lemmas in `Lovasz/Sanity.lean` (degree = `|S|`, connectivity ⇔ `⟨S⟩ = G`, positivity of
+  the threshold, non-vacuity, necessity of `n₀`). Modelling decisions are in `FORMALIZATION.md`.
+* **Proof:** `Lovasz.main_proof` in `Lovasz/Main.lean` has literally the type of the Challenge
+  theorem and depends only on the axioms `propext`, `Classical.choice`, `Quot.sound`. The only
+  `sorry` in the repository is the statement in `Challenge.lean`. The proof follows the lemma DAG
+  of `docs/BLUEPRINT.md`, in which every node (including the classical inputs: normalized
+  Cheeger, Hall, Haxell, the capacitated b-matching polytope, Watkins, tree packing,
+  max-flow/min-cut in the form of Hoffman's circulation theorem, Chernoff bounds) is proved.
+* **Paper review:** no gap was found; the deviations of the formal proof from the paper's text
+  are listed at the end of `docs/BLUEPRINT.md`.
+
+To check:
+
+```bash
+lake build
+printf 'import Lovasz\n#print axioms Lovasz.main_proof\n' > /tmp/axioms.lean
+lake env lean /tmp/axioms.lean
+```

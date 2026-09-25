@@ -10,6 +10,10 @@ with its paper reference, the Lean name and file, the ids it depends on, and a s
   which may still be `stated`);
 * `proved*` — proved and all its descendants are `proved`.
 
+**Current state: every node is `proved*`.** `Lovasz.main_proof` (type: literally the Challenge
+theorem) depends only on the axioms `propext`, `Classical.choice`, `Quot.sound`, and
+`rg -n sorry --glob '*.lean'` finds only the statement in `Challenge.lean`.
+
 Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean`.
 
 ## Modelling choices for the intermediate nodes
@@ -49,9 +53,9 @@ Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean
 
 | id | statement (paper) | Lean name — file | depends on | status |
 |---|---|---|---|---|
-| MAIN | Theorem 1.1 | `Lovasz.main_proof` — `Lovasz/Main.lean` (type is literally that of `Lovasz.hamiltonian_of_polylog_degree`) | GD, T3.2, L3.8 | proved |
+| MAIN | Theorem 1.1 | `Lovasz.main_proof` — `Lovasz/Main.lean` (type is literally that of `Lovasz.hamiltonian_of_polylog_degree`) | GD, T3.2, L3.8 | proved* |
 | L3.8 | Lemma 3.8 (cycle merging): absorbing parts + connected contraction of the connecting paths ⇒ Hamiltonian | `Lovasz.cycle_merging` — `Lovasz/CycleMerging.lean` | — | proved* |
-| T3.2 | Theorem 3.2 (local absorption) | `Lovasz.local_absorption` — `Lovasz/LocalAbsorption.lean` | T3.2a–g (below) | proved |
+| T3.2 | Theorem 3.2 (local absorption) | `Lovasz.local_absorption` — `Lovasz/LocalAbsorption.lean` | T3.2a–g (below) | proved* |
 | GD | Sections 5–7: the weighted partition, the connecting system and the parameter check of §7, packaged as the hypotheses of Lemma 3.8 plus those of Theorem 3.2 for each part | `Lovasz.global_decomposition` — `Lovasz/GlobalDecomposition.lean` | L5.1, P5.3, P6.1, L2.1 | proved* |
 
 ### Section 2: weighted spectral and matching facts
@@ -89,13 +93,13 @@ sub-nodes below, and `local_absorption` is proved from it.
 | id | step of §3.3 | Lean name — file | depends on | status |
 |---|---|---|---|---|
 | T3.2a | delete `E`; `H₀` keeps degrees `(1 ± 2cσ)D` and gap `σ/2` | `LocalAbsorption.deletion_step` — `Lovasz/Absorption/Basic.lean` | L2.1 | proved* |
-| T3.2b | the initial random partition (`R₁, R₂ = C ∪ Q, Z, I, O, U, V`, ports, dummies, filler matching) satisfies all events of §3.3, recorded in the structure `InitPartition` | `LocalAbsorption.initial_partition` — `Lovasz/Absorption/InitialPartition.lean` | L2.2, L2.3, L2.5, L2.1, E2.2c, K.chernoff | stated |
+| T3.2b | the initial random partition (`R₁, R₂ = C ∪ Q, Z, I, O, U, V`, ports, dummies, filler matching) satisfies all events of §3.3, recorded in the structure `InitPartition` | `LocalAbsorption.initial_partition` — `Lovasz/Absorption/InitialPartition.lean` | L2.2, L2.3, L2.5, L2.1, E2.2c, K.chernoff | proved* |
 | T3.2c | router: short cycles in `C` (L3.7), comparators (L3.5), arrangement (L3.6), all connections via L3.4 in `Q` (`RouterSpec`) | `LocalAbsorption.router_step` — `Lovasz/Absorption/RouterStep.lean` | L3.4, L3.5, L3.6, L3.7 | proved* |
 | T3.2d | attachments of `E` to the ports via L3.4 in `R₁`; the formal matching `J'` | inside `absorb_of_partition` | L3.4 | proved* |
 | T3.2e | divisibility: a path of prescribed odd length in `Z` (`DivSpec`) | `LocalAbsorption.divisibility_step` — `Lovasz/Absorption/Basic.lean` | L3.dfs | proved* |
 | L2.4 | Lemma 2.4 (fixed boundary, fresh layer), in counting form with the one-sided events (2.9) as `OneSided` | `LocalAbsorption.fixed_boundary_fresh_layer` — `Lovasz/Absorption/FixedBoundary.lean` | L2.2, L2.3 (helpers), K.chernoff | proved* |
 | T3.2f | fresh equipartition into layers with perfect matchings between consecutive layers, as a grid of `w` disjoint `O`–`I` rows (`FreshSpec`) | `LocalAbsorption.fresh_layers` — `Lovasz/Absorption/FreshLayers.lean` | L2.1, L2.3, L2.4, L2.5, E2.2c, K.chernoff | proved* |
-| T3.2g | assembly: router + outside rows + expansion of the formal edges ⇒ the path system of `IsMatchingAbsorbing` | `LocalAbsorption.assembly_core`, `expansion`, `uv_bijection`, `absorb_of_partition` — `Lovasz/Absorption/Basic.lean`, `Lovasz/LocalAbsorption.lean` | T3.2a, T3.2c–f (as hypotheses) | proved |
+| T3.2g | assembly: router + outside rows + expansion of the formal edges ⇒ the path system of `IsMatchingAbsorbing` | `LocalAbsorption.assembly_core`, `expansion`, `uv_bijection`, `absorb_of_partition` — `Lovasz/Absorption/Basic.lean`, `Lovasz/LocalAbsorption.lean` | T3.2a, T3.2c–f (as hypotheses) | proved* |
 
 Modelling choices in T3.2's decomposition (harmless modifications of the paper): the
 divisibility residue is taken in `[1, m]` instead of `[0, m)` (the divisibility path is always
@@ -145,15 +149,30 @@ used; when the paper's residue is `0`, one layer fewer); in the one-sided events
 
 ## Review of the paper's argument
 
-The paper is an unverified draft. While building the DAG we checked the arguments of the
-nodes above at the level of detail needed to state them. Findings so far:
+The paper is an unverified draft. Every step of its proof has now been formalized, so every
+node above has been checked in Lean. Findings:
 
-* **No definite gap found yet.** The parameter chain of Sections 6–7 is consistent: the text
-  extraction of (6.12) is garbled, but the page reads `p = A₂L/µ = O(L²/d)` with `µ = cd/L`, so
-  `pk² = O(L⁶/d) = o(1)` and `pk = O(L⁴/d)` as claimed.
-* **Lemma 2.5**: the extracted text reads `x ≤ 10α(m - |T|)`; the correct inequality from the
-  counting is `x ≤ (α/10)(m - |T|)`, which is what the final contradiction
-  `h < (α/10)(h + u) ≤ ((α+1)/10) h` uses (a typesetting issue, not a gap).
-* **Risk areas** (not yet formalized, highest review priority): the conditioning in Lemma 2.4 and
-  the fresh-layer union bound of §3.3; the use of the dependent rounding (Lemma 4.3) for the
-  matrix estimate of §5.3; negative-association Chernoff bounds in §6.4.
+* **No gap found.** Every lemma was provable as stated in the DAG; no node had to be weakened
+  or given an extra hypothesis relative to the paper.
+* **Typesetting issues only.** The text extraction of (6.12) is garbled, but the page reads
+  `p = A₂L/µ = O(L²/d)` with `µ = cd/L`, so `pk² = O(L⁶/d)` and `pk = O(L⁴/d)` as claimed. In
+  Lemma 2.5, the extracted text reads `x ≤ 10α(m - |T|)`; the PDF and the counting give
+  `x ≤ (α/10)(m - |T|)`, which is what the final contradiction uses.
+* **Places where the formal proof deviates from the paper's text** (none weakens a statement):
+  - Lemma 2.1 has a short direct variational proof (no interlacing), with `C' = 2/a`.
+  - Lemma 2.2 is derived from Lemma 4.3 instead of matrix Bernstein (see the modelling
+    choices above); Lemma 4.3 itself, including the matrix case (4.4), is proved.
+  - The b-matching polytope theorem is proved directly (vertex-splitting reduction to a
+    demand-one core theorem), not via Edmonds' perfect-matching polytope.
+  - Proposition 5.3: the gap of `H_i` is obtained directly from the variational form (testing
+    with the unweighted mean), so Lemma 2.1 is not needed there; per-coset independence is
+    realized by independent copies of one rounding law.
+  - Proposition 6.1: the existence of two parts is derived from (5.16) and the template's minimum
+    degree (the paper uses (5.4)); in the bipartite case the two-state graph is kept and split
+    into two copies of the ordinary contraction; the constant `pµ/16` in (6.15) is only right up
+    to counting arcs versus edges — what is needed (more than `1/ε = 256` unmarked crossing
+    edges) holds for `pµ ≥ 1100`.
+  - Section 3.3: the divisibility residue is taken in `[1, m]` instead of `[0, m)`; in (2.9) the
+    norm `‖F‖` is replaced by its bound `(1 - σ₀/2)D`; `Q` and `C` are sampled directly as
+    disjoint uniform sets; the bound (3.9) is replaced by a degree bound into
+    `C ∪ I ∪ O ∪ U ∪ V`; the column-norm part of (2.9) is derived from its degree part.

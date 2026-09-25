@@ -75,7 +75,13 @@ theorem Lovasz.hamiltonian_of_polylog_degree :
 
 ## Known discrepancies
 
-None in the statement.
+None in the statement. The statement was not changed after it was first committed.
+
+## Proof
+
+`Lovasz.main_proof` (`Lovasz/Main.lean`) proves `type_of% @Lovasz.hamiltonian_of_polylog_degree`
+and depends only on `propext`, `Classical.choice`, `Quot.sound`. The deviations of the formal
+proof from the paper's text are listed at the end of `docs/BLUEPRINT.md`.
 
 ## Definitions used only by the proof
 

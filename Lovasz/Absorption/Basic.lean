@@ -23,18 +23,18 @@ of Sections 2 and 3. The proof is decomposed into the following steps (sub-nodes
 
 * `T3.2a` `LocalAbsorption.deletion_step` (proved): `H₀ = H - E` keeps degrees `(1 ± 2cσ) D`
   and gap `σ / 2` (Lemma 2.1).
-* `T3.2b` `LocalAbsorption.initial_partition` (`sorry`, probabilistic): the initial random
+* `T3.2b` `LocalAbsorption.initial_partition` (probabilistic; `Absorption/InitialPartition.lean`): the initial random
   partition of §3.3 (the sets `R₁, Q, C, Z, I, O, U, V`, the ports and dummies, the filler
   matching of the special transition) satisfies all the events used later, recorded in the
   structure `InitPartition`.
-* `T3.2c` `LocalAbsorption.router_step` (`sorry`, deterministic from Lemmas 3.4–3.7): a Hamilton
+* `T3.2c` `LocalAbsorption.router_step` (deterministic from Lemmas 3.4–3.7; `Absorption/RouterStep.lean`): a Hamilton
   router on a vertex set inside `C ∪ Q ∪ I ∪ O` with terminals `I, O`.
 * `T3.2d` attachments: Lemma 3.4 in `R₁` (`spectral_connection`, applied directly).
 * `T3.2e` `LocalAbsorption.divisibility_step` (proved): a path of prescribed odd length in `Z`
   (the depth-first-search lemma).
-* `T3.2f` `LocalAbsorption.fresh_layers` (`sorry`, probabilistic): the fresh equipartition of
+* `T3.2f` `LocalAbsorption.fresh_layers` (probabilistic; `Absorption/FreshLayers.lean`): the fresh equipartition of
   the pool into layers with perfect matchings between consecutive layers (Lemmas 2.3, 2.4
-  (`LocalAbsorption.fixed_boundary_fresh_layer`, `sorry`), 2.5); its output is recorded as a
+  (`LocalAbsorption.fixed_boundary_fresh_layer`, `Absorption/FixedBoundary.lean`), 2.5); its output is recorded as a
   grid of `w` vertex-disjoint `O`–`I` paths.
 * `T3.2g` (proved) `LocalAbsorption.expansion`, `LocalAbsorption.uv_bijection`,
   `LocalAbsorption.assembly_core`, and the bookkeeping `LocalAbsorption.absorb_of_partition`:
