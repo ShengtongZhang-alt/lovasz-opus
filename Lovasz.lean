@@ -31,6 +31,11 @@ import Lovasz.Allocation
 import Lovasz.WeightedPartition
 import Lovasz.Connector
 import Lovasz.CycleMerging
+import Lovasz.Absorption.Basic
+import Lovasz.Absorption.InitialPartition
+import Lovasz.Absorption.RouterStep
+import Lovasz.Absorption.FixedBoundary
+import Lovasz.Absorption.FreshLayers
 import Lovasz.LocalAbsorption
 import Lovasz.GlobalDecomposition
 import Lovasz.Main
