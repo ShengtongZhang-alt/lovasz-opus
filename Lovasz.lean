@@ -29,6 +29,13 @@ import Lovasz.BipartiteSampling
 import Lovasz.MutualNominations
 import Lovasz.Allocation
 import Lovasz.WeightedPartition
+import Lovasz.Connecting.Basic
+import Lovasz.Connecting.LabelSampling
+import Lovasz.Connecting.Reservation
+import Lovasz.Connecting.AllocationCuts
+import Lovasz.Connecting.BipStateCuts
+import Lovasz.Connecting.Matching
+import Lovasz.Connecting.Integral
 import Lovasz.Connector
 import Lovasz.CycleMerging
 import Lovasz.Absorption.Basic
