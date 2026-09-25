@@ -51,7 +51,7 @@ Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean
 |---|---|---|---|---|
 | MAIN | Theorem 1.1 | `Lovasz.main_proof` — `Lovasz/Main.lean` (type is literally that of `Lovasz.hamiltonian_of_polylog_degree`) | GD, T3.2, L3.8 | proved |
 | L3.8 | Lemma 3.8 (cycle merging): absorbing parts + connected contraction of the connecting paths ⇒ Hamiltonian | `Lovasz.cycle_merging` — `Lovasz/CycleMerging.lean` | — | proved* |
-| T3.2 | Theorem 3.2 (local absorption) | `Lovasz.local_absorption` — `Lovasz/LocalAbsorption.lean` | L2.1, E2.2, E2.2c, L2.2, L2.3, L2.4, L2.5, L3.3, L3.4, L3.5, L3.6, L3.7, L3.dfs, K.chernoff | stated |
+| T3.2 | Theorem 3.2 (local absorption) | `Lovasz.local_absorption` — `Lovasz/LocalAbsorption.lean` | T3.2a–g (below) | proved |
 | GD | Sections 5–7: the weighted partition, the connecting system and the parameter check of §7, packaged as the hypotheses of Lemma 3.8 plus those of Theorem 3.2 for each part | `Lovasz.global_decomposition` — `Lovasz/GlobalDecomposition.lean` | L5.1, P5.3, P6.1, L2.1 | proved |
 
 ### Section 2: weighted spectral and matching facts
@@ -65,7 +65,7 @@ Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean
 | E2.4 | (2.3)–(2.4): the positive part `E₊` of `N_H - uuᵀ` has `(E₊)_vv ≤ C r^{-1/2}` for comparable support degrees `r` | *(inside P5.3)* | — | todo |
 | L2.2 | Lemma 2.2 (column sampling): `P(‖F[:,I]‖ > √q‖F‖ + C c√t) ≤ r(s+1)e^{-t}` | `Lovasz.column_sampling` — `Lovasz/ColumnSampling.lean` | L4.3, L4.2m | proved* |
 | L2.3 | Lemma 2.3 (bipartite sampling) | `Lovasz.bipartite_sampling` — `Lovasz/BipartiteSampling.lean` | L2.2, K.chernoff, L2.1 | stated |
-| L2.4 | Lemma 2.4 (fixed boundary, fresh layer) | *to be stated with T3.2's sub-nodes* | L2.2, K.chernoff | todo |
+| L2.4 | Lemma 2.4 (fixed boundary, fresh layer) | see the T3.2 table below | L2.2, K.chernoff | stated |
 | L2.5 | Lemma 2.5 (robust Hall) | `Lovasz.robust_hall` — `Lovasz/RobustHall.lean` | K.hall | proved* |
 | K.hall | Hall's marriage theorem | Mathlib `Finset.all_card_le_biUnion_card_iff_exists_injective` | — | proved (Mathlib) |
 | K.chernoff | scalar Chernoff bounds, including sampling without replacement and bounded weights (§2.2) | `Lovasz.chernoff_upper`, `chernoff_lower`, `hypergeometric_upper`, `hypergeometric_lower` — `Lovasz/Chernoff.lean` | — | proved* |
@@ -82,19 +82,26 @@ Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean
 | L3.7 | Lemma 3.7 (many disjoint short cycles) | `Lovasz.many_short_cycles` — `Lovasz/ShortCycles.lean` | — | proved* |
 | L3.dfs | §3.2 (end): comparable degrees and gap `σ` ⇒ a path with `cσM` vertices | `Lovasz.exists_long_path` — `Lovasz/LongPath.lean` | E2.2 | proved* |
 
-The proof of T3.2 (Section 3.3) is decomposed further as follows; these sub-nodes will receive
-Lean statements when T3.2 is attacked (they share one large data structure, the random partition
-of §3.3, which is best designed together with its proof).
+The proof of T3.2 (Section 3.3) is decomposed as follows. `LocalAbsorption.absorb_of_partition`
+(in `Lovasz/LocalAbsorption.lean`) carries out all the deterministic work of §3.3 from the
+sub-nodes below, and `local_absorption` is proved from it.
 
-| id | step of §3.3 | depends on |
-|---|---|---|
-| T3.2a | delete `E`; `H₀` keeps degrees `(1 ± c'σ)D` and gap `cσ` | L2.1 |
-| T3.2b | the initial random partition (`R₁, R₂, Z, I, O, U, V`, ports, `C ⊆ R₂`) satisfies all events (degrees, gaps (Lemma 2.3), one-sided events (2.9), (3.9), (3.10)) simultaneously | L2.3, K.chernoff |
-| T3.2c | router: `≥ w-1` short cycles in `C` (L3.7), comparators (L3.5), arrangement (L3.6), all connections via L3.4 in `Q`; `S` is balanced | L3.4, L3.5, L3.6, L3.7 |
-| T3.2d | attachments of `E` to the ports via L3.4 in `R₁`; the formal matching `J'` | L3.4 |
-| T3.2e | divisibility: a path of length `2r+1` in `Z` | L3.dfs |
-| T3.2f | fresh equipartition into layers; perfect matchings between consecutive layers | L2.1, L2.3, L2.4, L2.5, E2.2c |
-| T3.2g | assembly: layers + router + expansion of formal edges = Hamilton cycle of `H + J` through `J` | T3.2a–f |
+| id | step of §3.3 | Lean name — file | depends on | status |
+|---|---|---|---|---|
+| T3.2a | delete `E`; `H₀` keeps degrees `(1 ± 2cσ)D` and gap `σ/2` | `LocalAbsorption.deletion_step` — `Lovasz/Absorption/Basic.lean` | L2.1 | proved* |
+| T3.2b | the initial random partition (`R₁, R₂ = C ∪ Q, Z, I, O, U, V`, ports, dummies, filler matching) satisfies all events of §3.3, recorded in the structure `InitPartition` | `LocalAbsorption.initial_partition` — `Lovasz/Absorption/InitialPartition.lean` | L2.2, L2.3, L2.5, L2.1, E2.2c, K.chernoff | stated |
+| T3.2c | router: short cycles in `C` (L3.7), comparators (L3.5), arrangement (L3.6), all connections via L3.4 in `Q` (`RouterSpec`) | `LocalAbsorption.router_step` — `Lovasz/Absorption/RouterStep.lean` | L3.4, L3.5, L3.6, L3.7 | stated |
+| T3.2d | attachments of `E` to the ports via L3.4 in `R₁`; the formal matching `J'` | inside `absorb_of_partition` | L3.4 | proved* |
+| T3.2e | divisibility: a path of prescribed odd length in `Z` (`DivSpec`) | `LocalAbsorption.divisibility_step` — `Lovasz/Absorption/Basic.lean` | L3.dfs | proved* |
+| L2.4 | Lemma 2.4 (fixed boundary, fresh layer), in counting form with the one-sided events (2.9) as `OneSided` | `LocalAbsorption.fixed_boundary_fresh_layer` — `Lovasz/Absorption/FixedBoundary.lean` | L2.2, L2.3 (helpers), K.chernoff | stated |
+| T3.2f | fresh equipartition into layers with perfect matchings between consecutive layers, as a grid of `w` disjoint `O`–`I` rows (`FreshSpec`) | `LocalAbsorption.fresh_layers` — `Lovasz/Absorption/FreshLayers.lean` | L2.1, L2.3, L2.4, L2.5, E2.2c, K.chernoff | stated |
+| T3.2g | assembly: router + outside rows + expansion of the formal edges ⇒ the path system of `IsMatchingAbsorbing` | `LocalAbsorption.assembly_core`, `expansion`, `uv_bijection`, `absorb_of_partition` — `Lovasz/Absorption/Basic.lean`, `Lovasz/LocalAbsorption.lean` | T3.2a, T3.2c–f (as hypotheses) | proved |
+
+Modelling choices in T3.2's decomposition (harmless modifications of the paper): the
+divisibility residue is taken in `[1, m]` instead of `[0, m)` (the divisibility path is always
+used; when the paper's residue is `0`, one layer fewer); in the one-sided events (2.9) the norm
+`‖F‖` is replaced by its bound `(1 - σ₀/2)D`, the only way the proof uses it; the envelope
+(3.10) is measured in `H₀ = H - E`.
 
 ### Section 4: signed rounding
 
