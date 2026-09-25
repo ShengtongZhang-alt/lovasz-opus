@@ -4,6 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Shengtong Zhang
 -/
 import Lovasz.Allocation
+import Lovasz.SignedIntegrality
+import Lovasz.SwapRounding
+import Lovasz.TraceConcentration
+import Lovasz.Chernoff
+import Lovasz.Perturbation
 
 /-!
 # Proposition 5.3: the weighted partition

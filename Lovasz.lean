@@ -23,6 +23,13 @@ import Lovasz.Watkins
 import Lovasz.IncidenceCuts
 import Lovasz.CosetCuts
 import Lovasz.TreePacking
+import Lovasz.Chernoff
+import Lovasz.ColumnSampling
+import Lovasz.BipartiteSampling
+import Lovasz.MutualNominations
+import Lovasz.Allocation
+import Lovasz.WeightedPartition
+import Lovasz.Connector
 import Lovasz.CycleMerging
 import Lovasz.LocalAbsorption
 import Lovasz.GlobalDecomposition

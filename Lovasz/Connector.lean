@@ -4,6 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Shengtong Zhang
 -/
 import Lovasz.Allocation
+import Lovasz.CosetCuts
+import Lovasz.TreePacking
+import Lovasz.Watkins
+import Lovasz.MutualNominations
+import Lovasz.SignedCirculation
+import Lovasz.Circulation
+import Lovasz.SignedIntegrality
+import Lovasz.Chernoff
 
 /-!
 # Proposition 6.1: the sparse connecting system

@@ -3,7 +3,17 @@ Copyright (c) 2026 Shengtong Zhang. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Shengtong Zhang
 -/
-import Lovasz.Defs
+import Lovasz.GapCut
+import Lovasz.LongPath
+import Lovasz.Perturbation
+import Lovasz.RobustHall
+import Lovasz.SpectralConnection
+import Lovasz.Comparator
+import Lovasz.Router
+import Lovasz.ShortCycles
+import Lovasz.BipartiteSampling
+import Lovasz.ColumnSampling
+import Lovasz.Chernoff
 
 /-!
 # Theorem 3.2: local absorption
