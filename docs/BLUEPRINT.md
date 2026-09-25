@@ -62,7 +62,7 @@ Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean
 | E2.2c | §2.3: comparable degrees and gap `σ` ⇒ cut-density `cσD/h` | `WGraph.isCutDense_of_hasGap` — `Lovasz/GapCut.lean` | E2.2 | proved* |
 | K.cheeger | normalized Cheeger inequality `1 - λ₂ ≥ Φ²/2` (§2.1, [1]) | `WGraph.hasGap_of_conductance` — `Lovasz/Cheeger.lean` | — | proved* |
 | L2.1 | Lemma 2.1: deleting vertices/edges with degree loss `≤ b ≤ c'D` keeps gap `≥ σ - O(b/D)` | `Lovasz.hasGap_of_deletion` — `Lovasz/Perturbation.lean` | — | proved* |
-| E2.4 | (2.3)–(2.4): the positive part `E₊` of `N_H - uuᵀ` has `(E₊)_vv ≤ C r^{-1/2}` for comparable support degrees `r` | *(inside P5.3)* | — | todo |
+| E2.4 | (2.3)–(2.4): the positive part `E₊` of `N_H - uuᵀ` has `(E₊)_vv ≤ C r^{-1/2}` for comparable support degrees `r` | `WP.posPart_factor`, `WP.row_Emat` — `Lovasz/WeightedPartition.lean` | — | proved* |
 | L2.2 | Lemma 2.2 (column sampling): `P(‖F[:,I]‖ > √q‖F‖ + C c√t) ≤ r(s+1)e^{-t}` | `Lovasz.column_sampling` — `Lovasz/ColumnSampling.lean` | L4.3, L4.2m | proved* |
 | L2.3 | Lemma 2.3 (bipartite sampling) | `Lovasz.bipartite_sampling` — `Lovasz/BipartiteSampling.lean` | L2.2, K.chernoff, L2.1 | stated |
 | L2.4 | Lemma 2.4 (fixed boundary, fresh layer) | see the T3.2 table below | L2.2, K.chernoff | stated |
@@ -122,8 +122,8 @@ used; when the paper's residue is `0`, one layer fewer); in the one-sided events
 | L5.1 | Lemma 5.1 (penalized extraction of the template) | `Lovasz.penalized_extraction` — `Lovasz/Template.lean` | K.cheeger | proved* |
 | K.watkins | Watkins: vertex connectivity of a connected vertex-transitive graph of degree `k` is `≥ k/2` [8] (applied to components of Cayley graphs) | `Lovasz.watkins_cayley` — `Lovasz/Watkins.lean` | — | proved* |
 | L5.2 | Lemma 5.2 (incidence cuts) | `Lovasz.incidence_cut` — `Lovasz/IncidenceCuts.lean` | K.watkins | proved* |
-| E5.2 | (5.2): translate cover with every vertex in `≤ 2λ` copies and `c_e ∈ [λf_s/2, 2λf_s]` | *(inside P5.3)* | K.chernoff | todo |
-| P5.3 | Proposition 5.3 (weighted partition), including the law (5.7) of the reserved vertices; interface `Allocation.Good`, `ReservationLaw` in `Lovasz/Allocation.lean` | `Lovasz.weighted_partition` — `Lovasz/WeightedPartition.lean` | E5.2, L5.2, L4.1, L4.2, L4.2m, L4.3, E2.4, L2.1, K.chernoff | stated |
+| E5.2 | (5.2): translate cover with every vertex in `≤ 2λ` copies and `c_e ∈ [λf_s/2, 2λf_s]` | `WP.translate_cover` — `Lovasz/WeightedPartition.lean` | K.chernoff | proved* |
+| P5.3 | Proposition 5.3 (weighted partition), including the law (5.7) of the reserved vertices; interface `Allocation.Good`, `ReservationLaw` in `Lovasz/Allocation.lean` | `Lovasz.weighted_partition` — `Lovasz/WeightedPartition.lean` | E5.2, L5.2, L4.1, L4.2, L4.2m, L4.3, E2.4, K.chernoff | proved* |
 
 ### Section 6: a sparse connecting system
 
@@ -132,12 +132,16 @@ used; when the paper's residue is `0`, one layer fewer); in the one-sided events
 | L6.2 | Lemma 6.2 (coset cuts) | `Lovasz.coset_cut` — `Lovasz/CosetCuts.lean` | — | proved* |
 | K.trees | Nash-Williams–Tutte tree packing [4] | `Lovasz.tree_packing` — `Lovasz/TreePacking.lean` | — | proved* |
 | E6.4 | (6.4): cut counting | `Lovasz.cut_count` — `Lovasz/TreePacking.lean` | K.trees | proved* |
-| E6.1 | §6.1: label sampling (6.2), `O(L)` generating labels whose lifts generate `G × C₂`, `X₀` (6.3) | *(inside P6.1)* | K.chernoff | todo |
-| E6.5 | (6.5)–(6.6): reservation estimates | *(inside P6.1)* | L6.2, E6.4, K.chernoff | todo |
-| L6.3 | Lemma 6.3 (allocation cuts) | *to be stated in* `Lovasz/AllocationCuts.lean` | K.watkins, L6.2, E6.5 | todo |
-| E6.9 | (6.9): directional balance | *(inside P6.1)* | L6.3, E6.5 | todo |
-| L6.4 | Lemma 6.4 (mutual nominations; negative association and Chernoff) | `Lovasz.mutual_nominations` — `Lovasz/MutualNominations.lean` | K.chernoff | stated |
-| P6.1 | Proposition 6.1 (connecting system); interface `Allocation.IsConnector` in `Lovasz/Allocation.lean` | `Lovasz.connecting_system` — `Lovasz/Connector.lean` | E6.1, E6.5, L6.3, E6.9, L6.4, E6.4, L4.4, K.hoffman, L4.1 | stated |
+| E6.1 | §6.1: label sampling (6.2) | `Connector.label_sampling` — `Lovasz/Connecting/LabelSampling.lean`; the `O(L)` generating labels whose lifts generate `G × C₂`: `Connector.added_labels` — `Lovasz/Connecting/Basic.lean` (proved*) | K.chernoff | stated |
+| E6.5 | (6.5)–(6.6): reservation estimates | `Connector.reservation_estimates` — `Lovasz/Connecting/Reservation.lean` | L6.2, E6.4, K.chernoff | stated |
+| L6.3 | Lemma 6.3 (allocation cuts; lifted, local-odd-coset, and bipartite versions) | `Connector.allocation_cuts` — `Lovasz/Connecting/AllocationCuts.lean` | K.watkins, L6.2, E6.5 | stated |
+| E6.9 | (6.9)–(6.11): directional balance | `Connector.directional_balance` — `Lovasz/Connecting/Basic.lean` | L6.3, E6.5 (as hypotheses) | proved* |
+| E6.bip | bipartite case: state cuts split into two ordinary part cuts; cut counting for state cuts | `Connector.bip_state_cuts` — `Lovasz/Connecting/BipStateCuts.lean`; `Connector.state_cut_count` — `Lovasz/Connecting/Basic.lean` (proved*) | E6.4 | stated |
+| E6.13 | (6.13)–(6.17): the random matching `R`, marks `Z₀`, cut and endpoint estimates | `Connector.exists_matching` — `Lovasz/Connecting/Matching.lean` | L6.4, E6.4 | stated |
+| E6.int | §6.5: reserved-vertex paths, circulation (6.18)–(6.19), integral connector | `Connector.connector_of_matching` — `Lovasz/Connecting/Integral.lean` | L4.4, K.hoffman, L4.1 | proved* |
+| E6.jnt | §6.1: joint union bound over the allocation law and the label coins | `Connector.joint_union_bound` — `Lovasz/Connecting/Basic.lean` | — | proved* |
+| L6.4 | Lemma 6.4 (mutual nominations; negative association and Chernoff) | `Lovasz.mutual_nominations` — `Lovasz/MutualNominations.lean` | K.chernoff | proved* |
+| P6.1 | Proposition 6.1 (connecting system); interface `Allocation.IsConnector` in `Lovasz/Allocation.lean` | `Lovasz.connecting_system` — `Lovasz/Connector.lean` | E6.1, E6.5, L6.3, E6.9, E6.bip, E6.13, E6.int, E6.jnt (assembly `Connector.connector_of_outcome` in `Lovasz/Connector.lean`) | proved |
 
 ## Review of the paper's argument
 
