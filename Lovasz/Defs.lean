@@ -53,7 +53,70 @@ noncomputable def P (μ : FinDist α) (E : α → Prop) : ℝ :=
 def expect (μ : FinDist α) (f : α → ℝ) : ℝ :=
   ∑ a ∈ μ.support, μ.prob a * f a
 
+open Classical in
+/-- The point mass at `a`. -/
+def dirac (a : α) : FinDist α where
+  support := {a}
+  prob := fun b => if b = a then 1 else 0
+  prob_nonneg := fun b => by split_ifs <;> norm_num
+  sum_prob := by simp
+
+open Classical in
+/-- The mixture `p μ₁ + (1 - p) μ₂` for `p ∈ [0, 1]`. -/
+def mix (p : ℝ) (hp : 0 ≤ p ∧ p ≤ 1) (μ₁ μ₂ : FinDist α)
+    (h₁ : ∀ a ∉ μ₁.support, μ₁.prob a = 0) (h₂ : ∀ a ∉ μ₂.support, μ₂.prob a = 0) :
+    FinDist α where
+  support := μ₁.support ∪ μ₂.support
+  prob := fun a => p * μ₁.prob a + (1 - p) * μ₂.prob a
+  prob_nonneg := fun a => add_nonneg (mul_nonneg hp.1 (μ₁.prob_nonneg a))
+    (mul_nonneg (by linarith [hp.2]) (μ₂.prob_nonneg a))
+  sum_prob := by
+    have e₁ : ∑ a ∈ μ₁.support ∪ μ₂.support, μ₁.prob a = 1 := by
+      rw [← Finset.sum_subset Finset.subset_union_left (fun a _ ha => h₁ a ha)]
+      exact μ₁.sum_prob
+    have e₂ : ∑ a ∈ μ₁.support ∪ μ₂.support, μ₂.prob a = 1 := by
+      rw [← Finset.sum_subset Finset.subset_union_right (fun a _ ha => h₂ a ha)]
+      exact μ₂.sum_prob
+    rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum, e₁, e₂]
+    ring
+
+/-- The support is exact: the mass vanishes off the support. -/
+def IsExact (μ : FinDist α) : Prop := ∀ a ∉ μ.support, μ.prob a = 0
+
 end FinDist
+
+/-- A finite randomized process in `[0,1]^ι` moving along lines (Lemmas 4.2 and 4.3).
+`LineProcess ok x μ` means: started at `x`, the process has terminal distribution `μ`. At each
+step, conditional on the past, it either stops, or moves to `x + α h` with probability
+`β / (α + β)` and to `x - β h` with probability `α / (α + β)` (so the mean is unchanged), where
+the direction `h` satisfies `ok h`, and it continues with its own sub-process from each point.
+All visited points lie in `[0,1]^ι`. -/
+inductive LineProcess {ι : Type*} (ok : (ι → ℝ) → Prop) :
+    (ι → ℝ) → FinDist (ι → ℝ) → Prop
+  | stop (x : ι → ℝ) : (∀ i, 0 ≤ x i ∧ x i ≤ 1) → LineProcess ok x (FinDist.dirac x)
+  | move (x h : ι → ℝ) (α β : ℝ) (μ₁ μ₂ : FinDist (ι → ℝ)) (hα : 0 < α) (hβ : 0 < β)
+      (h₁ : μ₁.IsExact) (h₂ : μ₂.IsExact) :
+      (∀ i, 0 ≤ x i ∧ x i ≤ 1) → ok h →
+      LineProcess ok (x + α • h) μ₁ → LineProcess ok (x - β • h) μ₂ →
+      LineProcess ok x (FinDist.mix (β / (α + β))
+        ⟨div_nonneg hβ.le (add_pos hα hβ).le,
+          (div_le_one (add_pos hα hβ)).2 (le_add_of_nonneg_left hα.le)⟩ μ₁ μ₂ h₁ h₂)
+
+/-! ### Matrices -/
+
+open Matrix
+
+/-- `λ_max(A) ≥ t` for a real symmetric matrix: some unit vector has Rayleigh quotient `≥ t`. -/
+def LamMaxGe {q : ℕ} (A : Matrix (Fin q) (Fin q) ℝ) (t : ℝ) : Prop :=
+  ∃ v : Fin q → ℝ, v ⬝ᵥ v = 1 ∧ t ≤ v ⬝ᵥ (A *ᵥ v)
+
+/-- `λ_min(A) ≤ t`: some unit vector has Rayleigh quotient `≤ t`. -/
+def LamMinLe {q : ℕ} (A : Matrix (Fin q) (Fin q) ℝ) (t : ℝ) : Prop :=
+  ∃ v : Fin q → ℝ, v ⬝ᵥ v = 1 ∧ v ⬝ᵥ (A *ᵥ v) ≤ t
+
+/-- The quadratic form of `A` is at most `b |v|²` (for PSD `A`: `‖A‖ ≤ b`). -/
+def QuadLe {q : ℕ} (A : Matrix (Fin q) (Fin q) ℝ) (b : ℝ) : Prop :=
+  ∀ v : Fin q → ℝ, v ⬝ᵥ (A *ᵥ v) ≤ b * (v ⬝ᵥ v)
 
 /-! ### Weighted graphs -/
 
@@ -76,8 +139,8 @@ def supp : SimpleGraph V where
   symm := ⟨fun x y h => by rwa [H.symm]⟩
   loopless := ⟨fun x h => by simp [H.loopless] at h⟩
 
-/-- The induced weighted graph `H[A]` on the subtype `A`. -/
-def induce (A : Set V) : WGraph A where
+/-- The induced weighted graph `H[A]` on the vertex set `A`. -/
+def induce (A : Finset V) : WGraph A where
   w x y := H.w x y
   symm x y := H.symm x y
   nonneg x y := H.nonneg x y
@@ -239,7 +302,42 @@ def underlying : SimpleGraph V :=
 def integralSolutions [Fintype E] (b : V → ℝ) : Set (E → ℝ) :=
   {z | (∀ e, z e = 0 ∨ z e = 1) ∧ ∀ v, Γ.apply z v = b v}
 
+/-- Twin arcs (4.5) of the two-state directed graph: the edge `ij` with signs `s` at `i` and `t`
+at `j` gives the arcs `i^s → j^{-t}` (index `false`) and `j^t → i^{-s}` (index `true`). States
+are pairs `(vertex, sign)`. This is the tail of an arc. -/
+def twinTail : E × Bool → V × Bool
+  | (e, false) => (Γ.fst e, Γ.sfst e)
+  | (e, true) => (Γ.snd e, Γ.ssnd e)
+
+/-- The head of a twin arc (4.5). -/
+def twinHead : E × Bool → V × Bool
+  | (e, false) => (Γ.snd e, !Γ.ssnd e)
+  | (e, true) => (Γ.fst e, !Γ.sfst e)
+
 end SignedGraph
+
+/-! ### Cycles and comparator patterns (Section 3.2) -/
+
+section Comparator
+
+variable {V : Type*}
+
+/-- The cycle graph on the (distinct) vertices `c 0, c 1, …, c (m-1)`, `c (m-1) ∼ c 0`. -/
+def cycleOn {m : ℕ} (c : Fin m → V) : SimpleGraph V :=
+  SimpleGraph.fromEdgeSet {e | ∃ i : Fin m, e = s(c i, c (finRotate m i))}
+
+/-- Vertex `k mod 2r` of a `2r`-cycle `c`. -/
+def cyc {r : ℕ} (hr : 0 < r) (c : Fin (2 * r) → V) (k : ℕ) : V :=
+  c ⟨k % (2 * r), Nat.mod_lt _ (by omega)⟩
+
+/-- The pairing (3.4) of the non-terminal vertices of a `2r`-cycle (`r ≥ 3`), as index pairs:
+`{c_{2j+1} c_{2j+4} : 1 ≤ j ≤ r-3} ∪ {c_{2r-3} c_{2r-1}}`; empty for the 4-cycle `r = 2`. -/
+def comparatorPairs (r : ℕ) : List (ℕ × ℕ) :=
+  if r ≤ 2 then [] else
+    ((List.range (r - 3)).map fun j => (2 * (j + 1) + 1, 2 * (j + 1) + 4)) ++
+      [(2 * r - 3, 2 * r - 1)]
+
+end Comparator
 
 /-! ### Cayley-graph objects (Sections 5 and 6) -/
 
