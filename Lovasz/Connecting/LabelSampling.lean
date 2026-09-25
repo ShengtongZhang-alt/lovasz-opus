@@ -401,8 +401,6 @@ theorem label_sampling (cT A₀ cN : ℝ) (hcT : 0 < cT) (hA₀ : 0 < A₀) (hcN
     _ ≤ 1 / 8 + 1 / 8 := add_le_add hP1 hP2
     _ = 1 / 4 := by norm_num
 
-/-! ### Step E6.5: the reservation estimates (6.5)–(6.6) -/
-
 end Connector
 
 end Lovasz
