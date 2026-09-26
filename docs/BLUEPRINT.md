@@ -10,9 +10,10 @@ with its paper reference, the Lean name and file, the ids it depends on, and a s
   which may still be `stated`);
 * `proved*` — proved and all its descendants are `proved`.
 
-**Current state: every node is `proved*`.** `Lovasz.main_proof` (type: literally the Challenge
-theorem) depends only on the axioms `propext`, `Classical.choice`, `Quot.sound`, and
-`rg -n sorry --glob '*.lean'` finds only the statement in `Challenge.lean`.
+**Current state: every node is `proved*`.** `Lovasz.hamiltonian_of_polylog_degree` in
+`Solution.lean` (proved by `Lovasz.main_proof`) has the same statement as `Challenge.lean`, is
+accepted by Comparator, and depends only on the axioms `propext`, `Classical.choice`,
+`Quot.sound`; `rg -n sorry --glob '*.lean'` finds only the statement in `Challenge.lean`.
 
 Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean`.
 
@@ -53,7 +54,7 @@ Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean
 
 | id | statement (paper) | Lean name — file | depends on | status |
 |---|---|---|---|---|
-| MAIN | Theorem 1.1 | `Lovasz.main_proof` — `Lovasz/Main.lean` (type is literally that of `Lovasz.hamiltonian_of_polylog_degree`) | GD, T3.2, L3.8 | proved* |
+| MAIN | Theorem 1.1 | `Lovasz.main_proof` — `Lovasz/Main.lean`, restated as `Lovasz.hamiltonian_of_polylog_degree` in `Solution.lean` (Comparator: same statement as `Challenge.lean`) | GD, T3.2, L3.8 | proved* |
 | L3.8 | Lemma 3.8 (cycle merging): absorbing parts + connected contraction of the connecting paths ⇒ Hamiltonian | `Lovasz.cycle_merging` — `Lovasz/CycleMerging.lean` | — | proved* |
 | T3.2 | Theorem 3.2 (local absorption) | `Lovasz.local_absorption` — `Lovasz/LocalAbsorption.lean` | T3.2a–g (below) | proved* |
 | GD | Sections 5–7: the weighted partition, the connecting system and the parameter check of §7, packaged as the hypotheses of Lemma 3.8 plus those of Theorem 3.2 for each part | `Lovasz.global_decomposition` — `Lovasz/GlobalDecomposition.lean` | L5.1, P5.3, P6.1, L2.1 | proved* |

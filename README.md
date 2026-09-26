@@ -1,57 +1,124 @@
 # Hamilton cycles in Cayley graphs of polylogarithmic degree — Lean formalization
 
-A Lean 4 / Mathlib formalization of Theorem 1.1 of the research draft
-[`docs/Polylog_Cayley.pdf`](docs/Polylog_Cayley.pdf):
+A complete Lean 4 / Mathlib formalization of Theorem 1.1 of the research draft
+[`docs/Polylog_Cayley.pdf`](docs/Polylog_Cayley.pdf) by Matija Bucić, Micha Christoph,
+Domagoj Bradač, Oliver Janzer, Alp Müyesser and Zach Hunter:
 
-> There are absolute constants $C, n_0 > 0$ such that every connected Cayley graph on
-> $n \ge n_0$ vertices and of degree at least $C(\log n)^{13}/\log\log n$ contains a Hamilton
-> cycle.
+> **Theorem 1.1.** There are absolute constants $C, n_0 > 0$ such that every connected Cayley
+> graph on $n \ge n_0$ vertices and of degree at least $C(\log n)^{13}/\log\log n$ contains a
+> Hamilton cycle.
 
-This is a special case of the open conjecture, a variant of Lovász's question on
-vertex-transitive graphs, that every connected Cayley graph on at least three vertices is
-Hamiltonian. The draft itself says its proof has not been independently verified.
+In Lean this is `Lovasz.hamiltonian_of_polylog_degree`. It is stated in
+[`Challenge.lean`](Challenge.lean), which imports only Mathlib, and proved in
+[`Solution.lean`](Solution.lean). The proof depends only on the axioms `propext`,
+`Classical.choice` and `Quot.sound`.
+
+## The result and its context
+
+A Cayley graph $\mathrm{Cay}(G,S)$ of a finite group $G$ with respect to $S = S^{-1}$,
+$1 \notin S$ has the edges $x \sim xs$ ($s \in S$); it is $|S|$-regular and connected exactly
+when $S$ generates $G$. Lovász asked (1969) whether every connected vertex-transitive graph has
+a Hamilton path; the Cayley-graph form of the question asks whether every connected Cayley
+graph on at least three vertices is Hamiltonian. For arbitrary connected Cayley graphs this was
+previously known for linear degree (Christofides, Hladký and Máthé, 2014) and for degree at
+least $n^{1-c}$ (Bedert, Draganić, Müyesser and Pavez-Signé, 2026); Theorem 1.1 lowers the
+degree threshold to $C(\log n)^{13}/\log\log n$. `formalization.yaml` lists these and other
+references.
+
+The source manuscript is an unpublished research draft dated 25 September 2026. It calls its
+proof "a consolidated proposed proof, not an independently verified theorem". This
+formalization checks that proof in full; no gap was found.
+
+## What is formalized
+
+The statement and every modelling decision are explained in
+[`FORMALIZATION.md`](FORMALIZATION.md). In brief:
+
+* `Lovasz.IsConnectionSet S` is the paper's convention $S = S^{-1}$, $1 \notin S$;
+  `Lovasz.cayleyGraph S` is Mathlib's `SimpleGraph.mulCayley`;
+* the degree is `S.card`, the graph's degree at every vertex; connectivity is
+  `SimpleGraph.Connected`, equivalent to `Subgroup.closure S = ⊤`;
+* `log` is `Real.log`; the conclusion is Mathlib's `SimpleGraph.IsHamiltonian`.
+
+[`Lovasz/Sanity.lean`](Lovasz/Sanity.lean) proves that these definitions mean what the paper
+says: the graph degree is `|S|`, connectivity is equivalent to generation, the threshold is a
+genuine positive real for $n \ge 3$, the hypotheses are satisfiable for every $C$ and $n_0$
+(also by non-complete graphs), and `K₂` shows that some $n_0$ is needed.
+
+The whole proof of the paper is formalized, as a DAG of about 55 lemmas recorded in
+[`docs/BLUEPRINT.md`](docs/BLUEPRINT.md) with its Lean names and files. The development is in
+`Lovasz/` (about 36,500 lines in 49 modules):
+
+| Paper | Lean |
+|---|---|
+| Section 2: spectral and matching facts (Lemmas 2.1–2.5, (2.2)) | `Lovasz/Perturbation.lean`, `ColumnSampling.lean`, `BipartiteSampling.lean`, `RobustHall.lean`, `GapCut.lean` |
+| Section 3: local absorption (Theorem 3.2, Lemmas 3.3–3.8) | `Lovasz/LocalAbsorption.lean`, `Lovasz/Absorption/`, `DistanceDeletion.lean`, `SpectralConnection.lean`, `Comparator.lean`, `Router.lean`, `ShortCycles.lean`, `LongPath.lean`, `CycleMerging.lean` |
+| Section 4: signed rounding (Lemmas 4.1–4.4) | `Lovasz/SignedIntegrality.lean`, `SwapRounding.lean`, `TraceConcentration.lean`, `SignedCirculation.lean` |
+| Section 5: weighted partition (Lemmas 5.1–5.2, Proposition 5.3) | `Lovasz/Template.lean`, `IncidenceCuts.lean`, `WeightedPartition.lean` |
+| Section 6: connecting system (Lemmas 6.2–6.4, Proposition 6.1) | `Lovasz/CosetCuts.lean`, `MutualNominations.lean`, `Connector.lean`, `Lovasz/Connecting/` |
+| Section 7: parameter check | `Lovasz/GlobalDecomposition.lean`, `Lovasz/Main.lean` |
+| Classical inputs used without proof by the paper | `Lovasz/Cheeger.lean`, `Haxell.lean`, `BMatchingPolytope.lean`, `Watkins.lean`, `TreePacking.lean`, `Circulation.lean`, `Chernoff.lean` |
+
+The proof takes a different route from the paper's text in a few places without weakening any
+statement (for example, Lemma 2.2 is derived from the paper's own Lemma 4.3 instead of matrix
+Bernstein). These points are listed at the end of `docs/BLUEPRINT.md`.
+
+## Provenance and roles
+
+* **Mathematics.** The source manuscript is by the six authors named above. It was generated by
+  GPT 6 Astra (OpenAI) in collaboration with them.
+* **Formalization.** All the Lean code was written by Claude Opus 5.5 (Anthropic) agents
+  running in Grok Build: a coordinating agent wrote the statement, the sanity lemmas and the
+  lemma DAG, and 38 parallel subagents proved the nodes. The file headers credit the agent.
+  The one exception is the toolchain smoke test `Lovasz/Basic.lean`, which comes from the
+  maintainer's project setup and contains no proof content.
+* **Maintenance.** Shengtong Zhang is the responsible maintainer of this repository. He set up
+  the project and the task specification [`AGENTS.md`](AGENTS.md) and is not an author of the
+  source manuscript.
+* **Review.** The proof is checked by Lean's kernel, and Comparator's independent kernels
+  replay it. The statement was audited against the paper by the formalizing agent and by
+  independent agent runs of the Palomar review policy. No human has reviewed the Lean statement
+  or proof, and the manuscript has not been refereed.
+
+`formalization.yaml` records the structured provenance, automation and review metadata.
+
+## Verifying
+
+Lean `v4.35.0-rc2` and Mathlib `v4.35.0-rc2` are pinned in `lean-toolchain`, `lakefile.toml` and
+`lake-manifest.json`.
+
+```bash
+lake exe cache get
+lake build                     # Lovasz, Challenge, Solution
+./scripts/verify-comparator.sh # Comparator: Solution against Challenge (needs bubblewrap)
+```
+
+[`VERIFICATION.md`](VERIFICATION.md) records the commands run and their results. The CI workflow
+`.github/workflows/palomar.yml` runs the same checks.
+
+## Palomar
+
+The repository is laid out for the [Palomar registry](https://palomar-registry.org) of
+Lean-verified results: `Challenge.lean`, `Solution.lean`, `comparator.json` and
+`formalization.yaml` at the root. Submissions go through the Palomar submission form at
+<https://submit.palomar-registry.org/>.
 
 ## Layout
 
 | Path | Contents |
 |---|---|
-| `Challenge.lean` | Mathlib-only statement module: the definitions the statement needs and the main theorem (`sorry`). |
-| `Lovasz/` | The development: toolchain smoke test, sanity lemmas about the definitions, and the proof along the lemma DAG, ending in `Lovasz/Main.lean`. |
+| `Challenge.lean` | Mathlib-only statement: the two definitions and the theorem (`sorry`). |
+| `Solution.lean` | Restates the theorem and proves it from `Lovasz.main_proof`. |
+| `comparator.json` | Comparator configuration. |
+| `formalization.yaml` | Palomar / formalization.yaml v0.4 metadata. |
+| `Lovasz/` | The proof development; `Lovasz/Statement.lean` holds the statement definitions (copied verbatim from `Challenge.lean`), `Lovasz/Main.lean` the main proof. |
 | `FORMALIZATION.md` | Paper-to-Lean correspondence and modelling decisions. |
-| `docs/BLUEPRINT.md` | The DAG of intermediate lemmas and their status. |
-| `docs/Polylog_Cayley.pdf` | The source draft. |
-| `AGENTS.md` | Instructions for agents working in this repository. |
+| `VERIFICATION.md` | Verification record. |
+| `docs/BLUEPRINT.md` | The lemma DAG with per-node status, and a review of the paper's argument. |
+| `docs/Polylog_Cayley.pdf` | The source manuscript. It is the authors' work, included for reference; the repository's Apache-2.0 licence does not cover it. |
+| `AGENTS.md` | The task specification given to the formalizing agent. |
 
-## Building
+## Licence
 
-Lean `v4.35.0-rc2` and Mathlib `v4.35.0-rc2` are pinned in `lean-toolchain` and
-`lakefile.toml`.
-
-```bash
-lake exe cache get   # only needed on a fresh clone
-lake build
-```
-
-## Status
-
-**The formalization is complete.**
-
-* **Statement:** `Challenge.lean` (`Lovasz.hamiltonian_of_polylog_degree`), with fully proved
-  sanity lemmas in `Lovasz/Sanity.lean` (degree = `|S|`, connectivity ⇔ `⟨S⟩ = G`, positivity of
-  the threshold, non-vacuity, necessity of `n₀`). Modelling decisions are in `FORMALIZATION.md`.
-* **Proof:** `Lovasz.main_proof` in `Lovasz/Main.lean` has literally the type of the Challenge
-  theorem and depends only on the axioms `propext`, `Classical.choice`, `Quot.sound`. The only
-  `sorry` in the repository is the statement in `Challenge.lean`. The proof follows the lemma DAG
-  of `docs/BLUEPRINT.md`, in which every node (including the classical inputs: normalized
-  Cheeger, Hall, Haxell, the capacitated b-matching polytope, Watkins, tree packing,
-  max-flow/min-cut in the form of Hoffman's circulation theorem, Chernoff bounds) is proved.
-* **Paper review:** no gap was found; the deviations of the formal proof from the paper's text
-  are listed at the end of `docs/BLUEPRINT.md`.
-
-To check:
-
-```bash
-lake build
-printf 'import Lovasz\n#print axioms Lovasz.main_proof\n' > /tmp/axioms.lean
-lake env lean /tmp/axioms.lean
-```
+The Lean code, scripts and documentation are released under the Apache License 2.0
+([`LICENSE`](LICENSE)). This does not extend to `docs/Polylog_Cayley.pdf`.

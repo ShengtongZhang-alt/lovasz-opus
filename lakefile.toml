@@ -1,7 +1,7 @@
 name = "Lovasz"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["Lovasz", "Challenge"]
+defaultTargets = ["Lovasz", "Challenge", "Solution"]
 
 [leanOptions]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
@@ -22,3 +22,8 @@ globs = ["Lovasz", "Lovasz.+"]
 [[lean_lib]]
 name = "Challenge"
 roots = ["Challenge"]
+
+# `Solution` restates the Challenge theorem and proves it from the development.
+[[lean_lib]]
+name = "Solution"
+roots = ["Solution"]

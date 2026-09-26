@@ -1,4 +1,5 @@
 import Lovasz.Basic
+import Lovasz.Statement
 import Lovasz.Defs
 import Lovasz.Sanity
 import Lovasz.GapCut

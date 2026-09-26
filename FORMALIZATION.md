@@ -79,9 +79,13 @@ None in the statement. The statement was not changed after it was first committe
 
 ## Proof
 
-`Lovasz.main_proof` (`Lovasz/Main.lean`) proves `type_of% @Lovasz.hamiltonian_of_polylog_degree`
-and depends only on `propext`, `Classical.choice`, `Quot.sound`. The deviations of the formal
-proof from the paper's text are listed at the end of `docs/BLUEPRINT.md`.
+`Solution.lean` restates `Lovasz.hamiltonian_of_polylog_degree` with the same statement as
+`Challenge.lean` and proves it by `Lovasz.main_proof` (`Lovasz/Main.lean`). The two definitions
+the statement uses are copied verbatim from `Challenge.lean` into `Lovasz/Statement.lean`, so that
+the proof development does not import `Challenge`; Comparator checks that the theorem and both
+definitions are identical in the `Challenge` and `Solution` environments and that the proof uses
+only `propext`, `Classical.choice`, `Quot.sound` (see `VERIFICATION.md`). The deviations of the
+formal proof from the paper's text are listed at the end of `docs/BLUEPRINT.md`.
 
 ## Definitions used only by the proof
 

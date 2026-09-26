@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Shengtong Zhang. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Shengtong Zhang
+Authors: Claude Opus 5.5 (AI agent)
 -/
 import Lovasz.CycleMerging
 import Lovasz.LocalAbsorption
@@ -19,8 +19,16 @@ universe u
 
 namespace Lovasz
 
-/-- Theorem 1.1, with exactly the type of the audited statement in `Challenge.lean`. -/
-theorem main_proof : type_of% @Lovasz.hamiltonian_of_polylog_degree.{u} := by
+/-- Theorem 1.1, with exactly the statement of `Lovasz.hamiltonian_of_polylog_degree` in
+`Challenge.lean`; `Solution.lean` restates it under that name. -/
+theorem main_proof :
+    ∃ C : ℝ, ∃ n₀ : ℕ, 0 < C ∧ 0 < n₀ ∧
+      ∀ (G : Type u) [Group G] [Fintype G] [DecidableEq G] (S : Finset G),
+        IsConnectionSet S →
+        (cayleyGraph S).Connected →
+        n₀ ≤ Fintype.card G →
+        C * Real.log (Fintype.card G) ^ 13 / Real.log (Real.log (Fintype.card G)) ≤ S.card →
+        (cayleyGraph S).IsHamiltonian := by
   obtain ⟨ω, hω, hglobal⟩ := global_decomposition.{u}
   obtain ⟨c, C, hc, hC, hlocal⟩ := local_absorption.{u} ω hω
   obtain ⟨C₀, n₀, hC₀, hn₀, hdec⟩ := hglobal c C hc hC

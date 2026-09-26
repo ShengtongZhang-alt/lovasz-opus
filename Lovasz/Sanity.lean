@@ -1,9 +1,9 @@
 /-
 Copyright (c) 2026 Shengtong Zhang. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Shengtong Zhang
+Authors: Claude Opus 5.5 (AI agent)
 -/
-import Challenge
+import Lovasz.Statement
 
 /-!
 # Sanity checks for the statement surface
