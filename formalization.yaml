@@ -253,7 +253,7 @@ status:
     S = S^-1 and 1 not in S such that the Cayley graph is connected,
     |G| >= n0, and |S| >= C (log |G|)^13 / log log |G|, and concludes Mathlib's
     SimpleGraph.IsHamiltonian. The whole proof of the source is formalized in
-    Lovasz/ as a lemma DAG (docs/BLUEPRINT.md) of about 36,000 lines in 49
+    Lovasz/ as a lemma DAG (docs/BLUEPRINT.md) of about 36,500 lines in 49
     modules, including the classical results the source uses without proof
     (Hall's theorem comes from Mathlib, and matrix Bernstein is avoided).
     Nothing in the source's statement or proof is omitted. The explicit
@@ -373,8 +373,10 @@ fidelity:
     universe-polymorphic in G. At the level of the proof, the Lean development
     takes a different route from the source's text in a few places without
     weakening Theorem 1.1; the only intermediate statement whose form changes
-    is Lemma 2.2, whose universal constant becomes 6c in place of c because it
-    is derived from the source's Lemma 4.3 instead of matrix Bernstein. These
+    is Lemma 2.2, where the term c√t (c the largest column norm) gains a
+    universal factor and becomes 6c√t, because it is derived from the
+    source's Lemma 4.3 instead of matrix Bernstein; the later steps absorb
+    the factor. These
     points are listed at the end of docs/BLUEPRINT.md.
 
 review:

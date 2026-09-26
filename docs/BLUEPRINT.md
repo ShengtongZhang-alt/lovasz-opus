@@ -72,7 +72,7 @@ Section references are to the paper. Shared definitions are in `Lovasz/Defs.lean
 | L2.3 | Lemma 2.3 (bipartite sampling) | `Lovasz.bipartite_sampling` — `Lovasz/BipartiteSampling.lean` | L2.2, K.chernoff, L2.1 | proved* |
 | L2.4 | Lemma 2.4 (fixed boundary, fresh layer) | see the T3.2 table below | L2.2, K.chernoff | proved* |
 | L2.5 | Lemma 2.5 (robust Hall) | `Lovasz.robust_hall` — `Lovasz/RobustHall.lean` | K.hall | proved* |
-| K.hall | Hall's marriage theorem | Mathlib `Finset.all_card_le_biUnion_card_iff_exists_injective` | — | proved (Mathlib) |
+| K.hall | Hall's marriage theorem | Mathlib `Finset.all_card_le_biUnion_card_iff_existsInjective'` | — | proved (Mathlib) |
 | K.chernoff | scalar Chernoff bounds, including sampling without replacement and bounded weights (§2.2) | `Lovasz.chernoff_upper`, `chernoff_lower`, `hypergeometric_upper`, `hypergeometric_lower` — `Lovasz/Chernoff.lean` | — | proved* |
 
 ### Section 3: local absorption
@@ -159,7 +159,7 @@ node above has been checked in Lean. Findings:
   `p = A₂L/µ = O(L²/d)` with `µ = cd/L`, so `pk² = O(L⁶/d)` and `pk = O(L⁴/d)` as claimed. In
   Lemma 2.5, the extracted text reads `x ≤ 10α(m - |T|)`; the PDF and the counting give
   `x ≤ (α/10)(m - |T|)`, which is what the final contradiction uses.
-* **Places where the formal proof deviates from the paper's text** (none weakens Theorem 1.1; the only intermediate statement whose form changes is Lemma 2.2, whose universal constant becomes `6c`):
+* **Places where the formal proof deviates from the paper's text** (none weakens Theorem 1.1; the only intermediate statement whose form changes is Lemma 2.2, where the term `c√t` gains a universal factor and becomes `6c√t`):
   - Lemma 2.1 has a short direct variational proof (no interlacing), with `C' = 2/a`.
   - Lemma 2.2 is derived from Lemma 4.3 instead of matrix Bernstein (see the modelling
     choices above); Lemma 4.3 itself, including the matrix case (4.4), is proved.

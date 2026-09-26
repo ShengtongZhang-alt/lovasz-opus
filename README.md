@@ -62,8 +62,8 @@ The whole proof of the paper is formalized, as a DAG of about 55 lemmas recorded
 
 The proof takes a different route from the paper's text in a few places, without weakening
 Theorem 1.1 or any hypothesis it relies on. For example, Lemma 2.2 is derived from the paper's
-own Lemma 4.3 instead of matrix Bernstein, which changes the universal constant in Lemma 2.2 (the
-Lean version has `6c√t` in place of `c√t`); the later steps absorb the constant. These points are
+own Lemma 4.3 instead of matrix Bernstein, so the term `c√t` of Lemma 2.2 (`c` the largest column
+norm) gains a universal factor and becomes `6c√t`; the later steps absorb the factor. These points are
 listed at the end of `docs/BLUEPRINT.md`.
 
 ## Provenance and roles
