@@ -1,0 +1,29 @@
+name: Palomar mechanical preflight
+
+# Runs Palomar's own complete mechanical verifier (the reusable workflow of
+# PalomarRegistry/PalomarSubmission) on a commit of this repository, as Palomar's
+# agent protocol asks before submitting. Advisory only: it has no Palomar state and
+# is not a submission. Keep `pipeline_commit` equal to the SHA in `uses`.
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: Full 40-character commit to verify
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  palomar-preflight:
+    uses: PalomarRegistry/PalomarSubmission/.github/workflows/submission.yml@a59f25bd8a66bf6faf3a4f4260d412989c0185ea
+    with:
+      repository: ${{ github.repository }}
+      commit: ${{ inputs.commit }}
+      pipeline_commit: a59f25bd8a66bf6faf3a4f4260d412989c0185ea
+      request_id: preflight001
+      mode: full
+      execution_profile: palomar-standard-v1
+      options: '{"comparator_config_path":"comparator.json","authorization_relationship":"I am a responsible author or maintainer"}'

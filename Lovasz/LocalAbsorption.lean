@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Shengtong Zhang. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Claude Opus 5.5 (AI agent)
+Authors: Claude Opus 5.5 (AI agent), directed by Shengtong Zhang
 -/
 import Lovasz.Absorption.InitialPartition
 import Lovasz.Absorption.RouterStep

@@ -27,22 +27,21 @@ project:
     pieces by a sparse matching chosen by mutual nominations and a signed
     circulation, absorbs the outside matching inside every piece with Hamilton
     routers built from even-cycle comparators, and merges cycles. Every lemma of
-    the manuscript and every classical result it uses without proof (normalized
-    Cheeger inequality, Haxell's hypergraph matching theorem, the b-matching
-    polytope, Watkins's connectivity bound, the Nash-Williams–Tutte tree-packing
-    theorem, Hoffman's circulation criterion, scalar Chernoff bounds) is proved
-    in the repository. The source manuscript is an unpublished research draft
+    the manuscript is proved in the repository, as are the classical results it
+    uses without proof (normalized Cheeger inequality, Haxell's hypergraph
+    matching theorem, the b-matching polytope, Watkins's connectivity bound, the
+    Nash-Williams–Tutte tree-packing theorem, Hoffman's circulation criterion,
+    scalar Chernoff bounds); Hall's theorem is taken from Mathlib, and matrix
+    Bernstein is avoided by deriving the one lemma that used it from the
+    manuscript's own concentration bound. The source manuscript is an unpublished research draft
     that describes its own proof as not independently verified; this
     formalization is, to the maintainer's knowledge, the first verification of
     the theorem. The proved theorem has no sorry and depends only on propext,
     Classical.choice and Quot.sound.
+  # The human who directed the formalization and takes responsibility for it (see
+  # automation.notes); the authors of the source manuscript are recorded in sources[].
   authors:
-    - "Matija Bucić"
-    - "Micha Christoph"
-    - "Domagoj Bradač"
-    - "Oliver Janzer"
-    - "Alp Müyesser"
-    - "Zach Hunter"
+    - "Shengtong Zhang"
   license: "Apache-2.0"
   responsible_maintainers:
     - "Shengtong Zhang"
@@ -243,7 +242,8 @@ status:
     |G| >= n0, and |S| >= C (log |G|)^13 / log log |G|, and concludes Mathlib's
     SimpleGraph.IsHamiltonian. The whole proof of the source is formalized in
     Lovasz/ as a lemma DAG (docs/BLUEPRINT.md) of about 36,000 lines in 49
-    modules, including every classical result the source uses without proof.
+    modules, including the classical results the source uses without proof
+    (Hall's theorem comes from Mathlib, and matrix Bernstein is avoided).
     Nothing in the source's statement or proof is omitted. The explicit
     constants C and n0 are not extracted: the theorem is existential in them,
     as in the source.
@@ -325,16 +325,19 @@ automation:
         hardware: "API-hosted model."
   spend_usd: "About US$285–335 for phase 1 at list prices (see above); later phases not tracked separately."
   notes: >-
-    Agent-executed workflow with a human maintainer. Shengtong Zhang is the
-    responsible maintainer of this repository and is not an author of the
-    source manuscript. Claude Opus 5.5 agents in Grok Build produced all of the
-    Lean code, about 36,500 lines (phases 1 and 2); GPT 6 Astra generated the
-    source manuscript with its authors (phase 0). Correctness of the proof rests
-    on the Lean kernel and on Comparator's independent kernel replays; the
-    statement in Challenge.lean is the audited surface. The Lean file headers
-    credit the AI agent as the author of the code; the one exception,
-    Lovasz/Basic.lean, is a toolchain smoke test from the maintainer's project
-    setup with no proof content.
+    Agent-executed workflow directed by one human. Shengtong Zhang directed the
+    formalization and takes responsibility for it, which is why he is listed in
+    project.authors, and is the responsible maintainer of this repository. He
+    set up the project and the task specification and instructed the agents,
+    but wrote no Lean code, and he is not an author of the source manuscript,
+    whose authors are recorded in sources[]. Claude Opus 5.5 agents in Grok
+    Build produced all of the Lean code, about 36,500 lines (phases 1 and 2);
+    GPT 6 Astra generated the source manuscript with its authors (phase 0).
+    Correctness of the proof rests on the Lean kernel and on Comparator's
+    independent kernel replays; the statement in Challenge.lean is the audited
+    surface. The Lean file headers name the AI agent that wrote the code and the
+    human who directed it; the toolchain smoke test Lovasz/Basic.lean (no proof
+    content) was written by the maintainer during project setup.
 
 fidelity:
   divergences: >-
