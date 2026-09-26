@@ -1,13 +1,15 @@
-# Hamilton cycles in Cayley graphs of polylogarithmic degree — Lean formalization
-
-A complete Lean 4 / Mathlib formalization of Theorem 1.1 of the research draft
-[`docs/Polylog_Cayley.pdf`](docs/Polylog_Cayley.pdf). The PDF carries no author line; according to
-the maintainer, its authors are Matija Bucić, Micha Christoph, Domagoj Bradač, Oliver Janzer,
-Alp Müyesser and Zach Hunter.
+# Hamilton cycles in Cayley graphs of polylogarithmic degree
 
 > **Theorem 1.1.** There are absolute constants $C, n_0 > 0$ such that every connected Cayley
 > graph on $n \ge n_0$ vertices and of degree at least $C(\log n)^{13}/\log\log n$ contains a
 > Hamilton cycle.
+
+This theorem is proven in the research draft
+[`docs/Polylog_Cayley.pdf`](docs/Polylog_Cayley.pdf). 
+Its authors are Matija Bucić, Micha Christoph, Domagoj Bradač, Oliver Janzer,
+Alp Müyesser and Zach Hunter; the draft was prepared by GPT 6 Pro, with significant input from the authors, including
+several unpublished human manuscripts that were identified in the bibliography. The authors are working on a more readable exposition of the proof.
+
 
 In Lean this is `Lovasz.hamiltonian_of_polylog_degree`. It is stated in
 [`Challenge.lean`](Challenge.lean), which imports only Mathlib, and proved in
