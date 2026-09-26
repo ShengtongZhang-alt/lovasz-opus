@@ -159,7 +159,7 @@ node above has been checked in Lean. Findings:
   `p = A₂L/µ = O(L²/d)` with `µ = cd/L`, so `pk² = O(L⁶/d)` and `pk = O(L⁴/d)` as claimed. In
   Lemma 2.5, the extracted text reads `x ≤ 10α(m - |T|)`; the PDF and the counting give
   `x ≤ (α/10)(m - |T|)`, which is what the final contradiction uses.
-* **Places where the formal proof deviates from the paper's text** (none weakens a statement):
+* **Places where the formal proof deviates from the paper's text** (none weakens Theorem 1.1; the only intermediate statement whose form changes is Lemma 2.2, whose universal constant becomes `6c`):
   - Lemma 2.1 has a short direct variational proof (no interlacing), with `C' = 2/a`.
   - Lemma 2.2 is derived from Lemma 4.3 instead of matrix Bernstein (see the modelling
     choices above); Lemma 4.3 itself, including the matrix case (4.4), is proved.

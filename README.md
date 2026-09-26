@@ -60,9 +60,11 @@ The whole proof of the paper is formalized, as a DAG of about 55 lemmas recorded
 | Section 7: parameter check | `Lovasz/GlobalDecomposition.lean`, `Lovasz/Main.lean` |
 | Classical inputs used without proof by the paper | `Lovasz/Cheeger.lean`, `Haxell.lean`, `BMatchingPolytope.lean`, `Watkins.lean`, `TreePacking.lean`, `Circulation.lean`, `Chernoff.lean` |
 
-The proof takes a different route from the paper's text in a few places without weakening any
-statement (for example, Lemma 2.2 is derived from the paper's own Lemma 4.3 instead of matrix
-Bernstein). These points are listed at the end of `docs/BLUEPRINT.md`.
+The proof takes a different route from the paper's text in a few places, without weakening
+Theorem 1.1 or any hypothesis it relies on. For example, Lemma 2.2 is derived from the paper's
+own Lemma 4.3 instead of matrix Bernstein, which changes the universal constant in Lemma 2.2 (the
+Lean version has `6c√t` in place of `c√t`); the later steps absorb the constant. These points are
+listed at the end of `docs/BLUEPRINT.md`.
 
 ## Provenance and roles
 
